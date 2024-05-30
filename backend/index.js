@@ -1,28 +1,23 @@
 const express = require('express')
 const app = express()
 const path = require('path')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3500
 const {  logger } = require('./middleware/logger')
 const mongoose = require('mongoose');
+const autoIncrement = require('mongoose-sequence');
+const connectDB = require('./config/dbConn')
 require('dotenv').config();
+const cors = require("cors");
 
-const mongoString = process.env.DATABASE_URL
+app.use(cors());
 
-mongoose.connect(mongoString);
-const database = mongoose.connection
-
-database.on('error', (error) => {
-    console.log(error)
-})
-
-database.once('connected', () => {
-    console.log('Database Connected');
-})
+connectDB()
 
 app.use(logger)
 app.use(express.json())
 app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
+app.use('/sheeps', require('./routes/sheepRoutes'))
 
 app.all('*', (req, res) => {
     res.status(404)
@@ -35,7 +30,15 @@ app.all('*', (req, res) => {
     }
 })
 
-app.listen(PORT, () => {
-    console.log(`Server started at ${PORT}`)
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB')
+    app.listen(PORT, () => {
+        console.log(`Server started at ${PORT}`)
+    })    
+})
+
+
+mongoose.connection.on('error', err => {
+    console.log(err)
 })
 

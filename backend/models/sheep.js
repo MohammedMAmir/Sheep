@@ -16,10 +16,5 @@ const sheepSchema = new mongoose.Schema({
     }
 })
 
-sheepSchema.plugin(AutoIncrement, {
-    inc_field: 'id',
-    id: 'sheepNums',
-    start_seq: 1
-})
 
 module.exports = mongoose.model("sheep", sheepSchema)
