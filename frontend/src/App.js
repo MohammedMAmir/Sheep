@@ -7,10 +7,7 @@ class App extends React.Component {
     name:'',
     description: '',
     motto: '',
-    sheep: [],
-    clickedOnName: '',
-    clickedOnDes: '',
-    clickedOnMotto:''
+    sheep: []
   }
 
   //the full sheep list is requested each time the component mounts
@@ -109,11 +106,12 @@ class App extends React.Component {
     });
   }
 
+  //Final rendering of the form and sheep list
   render(){
     return(
       <div>
         <h2>Welcome to the Sheep Database</h2>
-        <div id="overlay"></div>
+          {/* Form Component */}
           <h2>Create a Sheep!</h2>
           <div className="form-input">
             <input 
@@ -147,6 +145,7 @@ class App extends React.Component {
           </div>
           <button type="submit" onClick={this.submit}>Submit</button>
 
+        {/*List of Existing Sheep in the Database */}
         <div className="sheeps">
           {this.displaySheeps(this.state.sheep)}
         </div>

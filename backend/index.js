@@ -11,14 +11,17 @@ const cors = require("cors");
 
 app.use(cors());
 
+//function to connect the server to the db
 connectDB()
 
+//a basic console logger for the server
 app.use(logger)
 app.use(express.json())
 app.use('/', express.static(path.join(__dirname, '/public')))
 app.use('/', require('./routes/root'))
 app.use('/sheeps', require('./routes/sheepRoutes'))
 
+//404 error page
 app.all('*', (req, res) => {
     res.status(404)
     if(req.accepts('html')){
@@ -30,6 +33,7 @@ app.all('*', (req, res) => {
     }
 })
 
+//checking the connection for errors
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB')
     app.listen(PORT, () => {
